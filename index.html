@@ -140,7 +140,7 @@
        
         let html = `<div class="page" data-n="${n}">` + headerHtml + `<h2 class="section-title">対戦表</h2><table><tr><th></th>`;
         names.forEach(name => html += `<th>${name}</th>`);
-        html += `<th class="print-only">勝</th><th class="print-only">負</th><th class="print-only">分</th><th class="print-only">本</th><th class="print-only">順</th></tr>`;
+        html += `<th class="print-only">勝</th><th class="print-only">負</th><th class="print-only">分</th><th class="print-only">本数</th><th class="print-only">順位</th></tr>`;
        
         for (let i = 0; i < n; i++) {
             html += `<tr><th>${names[i]}</th>`;
