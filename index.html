@@ -6,15 +6,15 @@
     <title>リーグ戦対戦表</title>
     <style>
         body { font-family: sans-serif; padding: 8px; margin: 0; background-color: #fff; color: #333; }
-        
+       
         .no-print { margin-bottom: 8px; background: #f9f9f9; padding: 10px; border-radius: 8px; }
         h2 { margin-top: 0 !important; margin-bottom: 8px !important; font-size: 1.1em; }
-        
+       
         .form-group { margin-bottom: 8px; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 2px; font-size: 0.9em; }
         .form-group input, .form-group textarea { width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .form-group textarea { height: 200px; }
-        
+       
         button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; background-color: #007bff; color: white; font-weight: bold; font-size: 14px; }
         button:disabled { background-color: #ccc; }
 
@@ -22,13 +22,13 @@
         .header-container { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
         h1 { font-size: 1.2em; margin: 0; }
         .date-display { font-size: 0.8em; color: #666; }
-        
+       
         h2.section-title { font-size: 1em; margin: 30px 0 30px 0 !important; }
-        
+       
         table { border-collapse: collapse; width: 100%; table-layout: fixed; }
         th, td { border: 1px solid #aaa; height: 30px; text-align: center; font-size: 11px; padding: 1px; position: relative; }
         th { background: #eee; }
-        
+       
         .diagonal-line {
             background: #eee;
             background-image: linear-gradient(to top right, transparent 49%, #aaa 50%, #aaa 51%, transparent 52%);
@@ -47,22 +47,28 @@
             .no-print { display: none; }
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
-            
-            /* 【修正】見出し行(th)にグレーの背景色を適用 */
-            .page table th { 
-                background-color: #eee !important; 
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact; 
+           
+            /* 印刷時の対戦番号を黒く太く強調 */
+            .match-num {
+                color: #000 !important;
+                font-weight: bold !important;
+                font-size: 9px !important;
             }
 
-            .page table { 
-                margin: 0 auto; 
-                border-collapse: collapse !important; 
-                border: 1px solid #aaa; 
+            .page table th {
+                background-color: #eee !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
-            .page table th, .page table td { 
-                border: 1px solid #aaa !important; 
-                height: 45px !important; 
+
+            .page table {
+                margin: 0 auto;
+                border-collapse: collapse !important;
+                border: 1px solid #aaa;
+            }
+            .page table th, .page table td {
+                border: 1px solid #aaa !important;
+                height: 45px !important;
             }
 
             .page[data-n="3"] table { width: 50% !important; }
@@ -76,7 +82,7 @@
 
             .print-only { display: table-cell !important; width: 25px !important; }
             .diagonal-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
+           
             .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; }
             .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
             .print-col-2 { min-width: 45% !important; }
@@ -130,11 +136,11 @@
         else if (n >= 9) printCols = 3;
 
         const headerHtml = `<div class="header-container"><h1>${eventName}</h1><div class="date-display">${dateStr}</div></div>`;
-        
+       
         let html = `<div class="page" data-n="${n}">` + headerHtml + `<h2 class="section-title">対戦表</h2><table><tr><th></th>`;
         names.forEach(name => html += `<th>${name}</th>`);
         html += `<th class="print-only">勝</th><th class="print-only">負</th><th class="print-only">分</th><th class="print-only">本</th><th class="print-only">順</th></tr>`;
-        
+       
         for (let i = 0; i < n; i++) {
             html += `<tr><th>${names[i]}</th>`;
             for (let j = 0; j < n; j++) {
@@ -144,10 +150,10 @@
             html += `<td class="print-only"></td><td class="print-only"></td><td class="print-only"></td><td class="print-only"></td><td class="print-only"></td></tr>`;
         }
         html += `</table></div><div class='page'>` + headerHtml + `<h2 class="section-title">対戦順</h2><div class="match-list-container">`;
-        
+       
         const printColClass = `print-col-${printCols}`;
         const matchesPerCol = Math.ceil(matches.length / printCols);
-        
+       
         for (let c = 0; c < printCols; c++) {
             html += `<div class="match-list-column ${printColClass}"><table><tr><th class="match-num-col"></th><th>赤</th><th>白</th></tr>`;
             const colMatches = matches.slice(c * matchesPerCol, (c + 1) * matchesPerCol);
