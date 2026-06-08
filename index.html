@@ -48,7 +48,14 @@
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
             
-            /* 印刷用：枠線を一本化し、人数ごとに幅を調整 */
+            /* 【追加】ヘッダーに背景色を指定 */
+            .header-container { 
+                background-color: #eee !important; 
+                padding: 5px; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
+            }
+
             .page table { 
                 margin: 0 auto; 
                 border-collapse: collapse !important; 
