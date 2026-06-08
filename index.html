@@ -34,29 +34,40 @@
             background-image: linear-gradient(to top right, transparent 49%, #aaa 50%, #aaa 51%, transparent 52%);
         }
 
-        .match-num { position: absolute; top: 1px; left: 2px; font-size: 7px; color: #888; line-height: 1; }
         .match-num-col { width: 35px; }
+        .match-num { position: absolute; top: 1px; left: 2px; font-size: 7px; color: #888; line-height: 1; }
+
         .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; }
         .match-list-column { flex: 1; min-width: 100%; }
+
         .print-only { display: none; }
 
         @media print {
-            @page { size: A4 portrait; margin: 12mm; }
+            @page { size: A4 portrait; margin: 8mm; }
             .no-print { display: none; }
             .page { page-break-after: always; margin-bottom: 0; }
+            .page:last-child { page-break-after: avoid; }
             
-            /* 人数に応じたセルの高さ設定 */
-            .page[data-n="3"] table th, .page[data-n="3"] table td { height: 100px; font-size: 14px; }
-            .page[data-n="4"] table th, .page[data-n="4"] table td { height: 80px; font-size: 14px; }
-            .page[data-n="5"] table th, .page[data-n="5"] table td { height: 65px; font-size: 14px; }
-            .page[data-n="6"] table th, .page[data-n="6"] table td { height: 55px; }
-            .page[data-n="7"] table th, .page[data-n="7"] table td { height: 48px; }
-            .page[data-n="8"] table th, .page[data-n="8"] table td { height: 42px; }
-            .page[data-n="9"] table th, .page[data-n="9"] table td { height: 38px; }
-            .page[data-n="10"] table th, .page[data-n="10"] table td { height: 35px; }
+            .page table { margin: 0 auto; table-layout: fixed; border-collapse: separate !important; }
+            .page[data-n="3"] table { width: 50% !important; }
+            .page[data-n="4"] table { width: 60% !important; }
+            .page[data-n="5"] table { width: 70% !important; }
+            .page[data-n="6"] table { width: 80% !important; }
+            .page[data-n="7"] table { width: 90% !important; }
+            .page[data-n="8"] table { width: 95% !important; }
+            .page[data-n="9"] table { width: 100% !important; }
+            .page[data-n="10"] table { width: 100% !important; }
 
-            .print-only { display: table-cell !important; width: 30px !important; }
-            .diagonal-line { -webkit-print-color-adjust: exact; background-color: #eee !important; }
+            .page table th, .page table td { height: 45px !important; }
+
+            .print-only { display: table-cell !important; width: 25px !important; }
+            .diagonal-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; }
+            .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
+            .print-col-2 { min-width: 45% !important; }
+            .print-col-3 { min-width: 30% !important; }
+            .print-col-3 .match-num-col { width: 22px; }
         }
     </style>
 </head>
@@ -91,6 +102,7 @@
 
         const now = new Date();
         const dateStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
+
         const matrix = LEAGUE_TABLES[n];
         let matches = [];
         for (let i = 0; i < n; i++) {
@@ -99,11 +111,15 @@
         matches.sort((a, b) => a.originalNum - b.originalNum);
         matches.forEach((m, idx) => m.num = idx + 1);
 
+        let printCols = 1;
+        if (n >= 6 && n <= 8) printCols = 2;
+        else if (n >= 9) printCols = 3;
+
         const headerHtml = `<div class="header-container"><h1>${eventName}</h1><div class="date-display">${dateStr}</div></div>`;
         
         let html = `<div class="page" data-n="${n}">` + headerHtml + `<h2 class="section-title">対戦表</h2><table><tr><th></th>`;
         names.forEach(name => html += `<th>${name}</th>`);
-        html += `<th class="print-only">勝</th><th class="print-only">負</th><th class="print-only">分</th></tr>`;
+        html += `<th class="print-only">勝</th><th class="print-only">負</th><th class="print-only">分</th><th class="print-only">本</th><th class="print-only">順</th></tr>`;
         
         for (let i = 0; i < n; i++) {
             html += `<tr><th>${names[i]}</th>`;
@@ -111,14 +127,20 @@
                 const match = matches.find(m => (m.p1 === names[i] && m.p2 === names[j]) || (m.p1 === names[j] && m.p2 === names[i]));
                 html += (i === j) ? `<td class="diagonal-line"></td>` : `<td><span class="match-num">${match ? match.num : ""}</span></td>`;
             }
-            html += `<td class="print-only"></td><td class="print-only"></td><td class="print-only"></td></tr>`;
+            html += `<td class="print-only"></td><td class="print-only"></td><td class="print-only"></td><td class="print-only"></td><td class="print-only"></td></tr>`;
         }
-        
-        // 対戦順リスト
         html += `</table></div><div class='page'>` + headerHtml + `<h2 class="section-title">対戦順</h2><div class="match-list-container">`;
-        html += `<div class="match-list-column"><table><tr><th class="match-num-col">No.</th><th>赤</th><th>白</th></tr>`;
-        matches.forEach(m => html += `<tr><td>${m.num}</td><td>${m.p1}</td><td>${m.p2}</td></tr>`);
-        html += `</table></div></div></div>`;
+        
+        const printColClass = `print-col-${printCols}`;
+        const matchesPerCol = Math.ceil(matches.length / printCols);
+        
+        for (let c = 0; c < printCols; c++) {
+            html += `<div class="match-list-column ${printColClass}"><table><tr><th class="match-num-col"></th><th>赤</th><th>白</th></tr>`;
+            const colMatches = matches.slice(c * matchesPerCol, (c + 1) * matchesPerCol);
+            colMatches.forEach(m => html += `<tr><td>${m.num}</td><td>${m.p1}</td><td>${m.p2}</td></tr>`);
+            html += `</table></div>`;
+        }
+        html += `</div></div>`;
 
         document.getElementById('output').innerHTML = html;
         document.getElementById('printBtn').disabled = false;
