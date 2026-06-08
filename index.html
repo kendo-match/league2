@@ -48,22 +48,14 @@
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
             
-            /* 【修正】見出し行(th)にグレーの背景色を適用 */
-            .page table th { 
-                background-color: #eee !important; 
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact; 
-            }
-
-            .page table { 
-                margin: 0 auto; 
-                border-collapse: collapse !important; 
-                border: 1px solid #aaa; 
-            }
-            .page table th, .page table td { 
-                border: 1px solid #aaa !important; 
-                height: 45px !important; 
-            }
+            /* 【印刷時】枠線を太く・濃く統一 */
+            .page table { border-collapse: collapse !important; border: 1px solid #000; margin: 0 auto; }
+            .page th, .page td { border: 1px solid #000 !important; }
+            
+            /* 【印刷時】見出し行の背景色と数字の視認性アップ */
+            .page th { background-color: #ddd !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .match-num { color: #000 !important; font-weight: bold !important; font-size: 10px !important; }
+            .diagonal-line { background: #ddd !important; -webkit-print-color-adjust: exact; }
 
             .page[data-n="3"] table { width: 50% !important; }
             .page[data-n="4"] table { width: 60% !important; }
@@ -75,13 +67,7 @@
             .page[data-n="10"] table { width: 100% !important; }
 
             .print-only { display: table-cell !important; width: 25px !important; }
-            .diagonal-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
             .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; }
-            .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
-            .print-col-2 { min-width: 45% !important; }
-            .print-col-3 { min-width: 30% !important; }
-            .print-col-3 .match-num-col { width: 22px; }
         }
     </style>
 </head>
@@ -133,7 +119,7 @@
         
         let html = `<div class="page" data-n="${n}">` + headerHtml + `<h2 class="section-title">対戦表</h2><table><tr><th></th>`;
         names.forEach(name => html += `<th>${name}</th>`);
-        html += `<th class="print-only">勝</th><th class="print-only">負</th><th class="print-only">分</th><th class="print-only">本数</th><th class="print-only">順位</th></tr>`;
+        html += `<th class="print-only">勝</th><th class="print-only">負</th><th class="print-only">分</th><th class="print-only">本</th><th class="print-only">順</th></tr>`;
         
         for (let i = 0; i < n; i++) {
             html += `<tr><th>${names[i]}</th>`;
