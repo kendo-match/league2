@@ -48,7 +48,17 @@
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
             
-            .page table { margin: 0 auto; table-layout: fixed; border-collapse: separate !important; }
+            /* 印刷用：枠線を一本化し、人数ごとに幅を調整 */
+            .page table { 
+                margin: 0 auto; 
+                border-collapse: collapse !important; 
+                border: 1px solid #aaa; 
+            }
+            .page table th, .page table td { 
+                border: 1px solid #aaa !important; 
+                height: 45px !important; 
+            }
+
             .page[data-n="3"] table { width: 50% !important; }
             .page[data-n="4"] table { width: 60% !important; }
             .page[data-n="5"] table { width: 70% !important; }
@@ -57,8 +67,6 @@
             .page[data-n="8"] table { width: 95% !important; }
             .page[data-n="9"] table { width: 100% !important; }
             .page[data-n="10"] table { width: 100% !important; }
-
-            .page table th, .page table td { height: 45px !important; }
 
             .print-only { display: table-cell !important; width: 25px !important; }
             .diagonal-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
