@@ -29,25 +29,27 @@
         th, td { border: 1px solid #aaa; height: 30px; text-align: center; font-size: 11px; padding: 1px; position: relative; }
         th { background: #eee; }
        
-    .diagonal-line {
-        background: #eee !important;
-        background-image: linear-gradient(
-            to top right,
-            transparent 49.5%,
-            #777 50%,
-            transparent 50.5%
-        ) !important;
-
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-
+.diagonal-line {
+    background: #eee;
+    background-image: linear-gradient(
+        to top right,
+        transparent 49%,
+        #666 50%,
+        #666 51%,
+        transparent 52%
+    );
 }
+
 
         .match-num-col { width: 35px; }
         .match-num { position: absolute; top: 1px; left: 2px; font-size: 7px; color: #888; line-height: 1; }
 
-        .match-list-container { display: flex; gap: 20px: row; flex-wrap: wrap; gap: 20px; }
+.match-list-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
         .match-list-column { flex: 1; min-width: 100%; }
 
         .print-only { display: none; }
@@ -103,7 +105,18 @@
             .page[data-n="10"] table { width: 100% !important; }
 
             .print-only { display: table-cell !important; width: 25px !important; }
-            .diagonal-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.diagonal-line {
+    background: #eee !important;
+    background-image: linear-gradient(
+        to top right,
+        transparent 49%,
+        #666 50%,
+        #666 51%,
+        transparent 52%
+    ) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
            
             .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 25px; }
             .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
