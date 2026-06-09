@@ -29,14 +29,19 @@
         th, td { border: 1px solid #aaa; height: 30px; text-align: center; font-size: 11px; padding: 1px; position: relative; }
         th { background: #eee; }
        
-.diagonal-line {
-    background: #eee;
-    background-image: linear-gradient(
-        to top right,
-        transparent 49.5%,
-        #777 50%,
-        transparent 50.5%
-    );
+    .diagonal-line {
+        background: #eee !important;
+        background-image: linear-gradient(
+            to top right,
+            transparent 49.5%,
+            #777 50%,
+            transparent 50.5%
+        ) !important;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
 }
 
         .match-num-col { width: 35px; }
