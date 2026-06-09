@@ -62,15 +62,20 @@
                 print-color-adjust: exact;
             }
 
-            .page table {
-                margin: 0 auto;
-                border-collapse: collapse !important;
-                border: 1px solid #aaa;
-            }
-            .page table th, .page table td {
-                border: 1px solid #aaa !important;
-                height: 45px !important;
-            }
+.page table {
+    margin: 0 auto;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-left: 1px solid #333;
+    border-top: 1px solid #333;
+}
+
+.page table th,
+.page table td {
+    border: 0 !important;
+    border-right: 1px solid #333 !important;
+    border-bottom: 1px solid #333 !important;
+}
 
             .page[data-n="3"] table { width: 50% !important; }
             .page[data-n="4"] table { width: 60% !important; }
